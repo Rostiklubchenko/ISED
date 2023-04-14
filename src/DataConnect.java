@@ -1,7 +1,45 @@
 import java.sql.*;
 
 public class DataConnect {
-    String databaseURL = "jdbc:ucanaccess://Cinema.accdb";
+    String databaseURL;
+    public DataConnect(String databaseURL){
+        this.databaseURL = databaseURL;
+    }
+    Object[][] getDatabase() {
+        String databaseURL = "jdbc:ucanaccess://Cinema.accdb";
+        int id;
+        int row;
+        int place;
+        String firstName;
+        String lastName;
+        Object[][] data = new Object[GetRows()][5];
+        try (Connection connection = DriverManager.getConnection(databaseURL)) {
+
+            String sql = "SELECT * FROM Places";
+            Statement statement = connection.createStatement();
+            ResultSet result = statement.executeQuery(sql);
+
+            int i = 0;
+
+            while (result.next()) {
+                id = result.getInt("ID");
+                firstName = result.getString("First_Name");
+                lastName = result.getString("Last_Name");
+                row = result.getInt("Row_Place");
+                place = result.getInt("Place");
+                System.out.println(id + ". " + firstName + "   " + lastName + "   " + row + "   " + place);
+                data[i][0] = id;
+                data[i][1] = firstName;
+                data[i][2] = lastName;
+                data[i][3] = row;
+                data[i][4] = place;
+                i++;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return data;
+    }
     int GetFreeID() {
         int id = 0;
         try (Connection connection = DriverManager.getConnection(databaseURL)) {
