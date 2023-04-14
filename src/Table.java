@@ -3,6 +3,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Objects;
 
 public class Table extends JFrame {
     DataConnect connection = new DataConnect("jdbc:ucanaccess://Cinema.accdb");
@@ -10,7 +11,7 @@ public class Table extends JFrame {
     JTable table;
     Table() {
         System.out.println(connection.GetRows());
-        setTitle("Це база друже");
+        setTitle("Це база друже, надягаю кавун");
         setPreferredSize(new Dimension(600, 400));
         setLocationRelativeTo(null);
         addWindowListener(new WindowAdapter() {
@@ -18,8 +19,6 @@ public class Table extends JFrame {
                 System.exit(0);
             }
         });
-        JButton addInf = new JButton("Add");
-        addInf.addActionListener(e -> add());
 
         tableModel = new DefaultTableModel();
         table = new JTable(tableModel);
@@ -30,6 +29,9 @@ public class Table extends JFrame {
         tableModel.addColumn("Place");
         fillTable(connection.getDatabase());
         add(new JScrollPane(table), BorderLayout.CENTER);
+
+        JButton addInf = new JButton("Add");
+        addInf.addActionListener(e -> add());
 
         JButton deleteInf = new JButton("Delete");
         deleteInf.addActionListener(e -> delete());
@@ -64,35 +66,26 @@ public class Table extends JFrame {
     }
 
     void add() {
-        int row;
-        int place;
+        int row = 0;
+        int place = 0;
         String firstName = JOptionPane.showInputDialog("Enter First Name:");
         String lastName = JOptionPane.showInputDialog("Enter Last Name:");
         String tx_row;
-        while (true){
-            tx_row = JOptionPane.showInputDialog("Enter row:");
-            try {
-                row = Integer.parseInt(tx_row);
-                break;
-            } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(Table.this,
-                        "Row must be a valid number.", "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        }
+        tx_row = JOptionPane.showInputDialog("Enter row:");
+        try {
+            row = Integer.parseInt(tx_row);
+        } catch (NumberFormatException ignored) {}
         String tx_place;
-        while (true){
-            tx_place = JOptionPane.showInputDialog("Enter place:");
-            try {
-                place = Integer.parseInt(tx_place);
-                break;
-            } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(Table.this,
-                        "Place must be a valid number.", "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        }
-        if (firstName != null && lastName != null && row != 0 && place != 0) {
+        tx_place = JOptionPane.showInputDialog("Enter place:");
+        try {
+            place = Integer.parseInt(tx_place);
+        } catch (NumberFormatException ignored) {}
+        if (!Objects.equals(firstName, "") && !Objects.equals(lastName, "") && row != 0 && place != 0) {
             tableModel.addRow(new Object[]{connection.GetFreeID(), firstName, lastName, row, place});
+            connection.AddNewInfo(firstName, lastName, row, place);
+        } else {
+            JOptionPane.showMessageDialog(Table.this,
+                    "Something went wrong. Row was not added", "Error", JOptionPane.ERROR_MESSAGE);
         }
-        connection.AddNewInfo(firstName, lastName, row, place);
     }
 }
