@@ -3,7 +3,6 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.sql.*;
 
 public class Table extends JFrame {
     DataConnect connection = new DataConnect("jdbc:ucanaccess://Cinema.accdb");
