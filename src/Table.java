@@ -10,7 +10,7 @@ public class Table extends JFrame {
     DefaultTableModel tableModel;
     JTable table;
     Table() {
-        System.out.println(connection.GetRows());
+        System.out.println(connection.getRows());
         setTitle("Це база друже, надягаю кавун");
         setPreferredSize(new Dimension(600, 400));
         setLocationRelativeTo(null);
@@ -46,7 +46,7 @@ public class Table extends JFrame {
     }
 
     void fillTable(Object[][] data){
-        for (int i = 0; i < connection.GetRows(); i++){
+        for (int i = 0; i < connection.getRows(); i++){
             int id = (int) data[i][0];
             String firstName = (String) data[i][1];
             String lastName = (String) data[i][2];
@@ -81,8 +81,8 @@ public class Table extends JFrame {
             place = Integer.parseInt(tx_place);
         } catch (NumberFormatException ignored) {}
         if (!Objects.equals(firstName, "") && !Objects.equals(lastName, "") && row != 0 && place != 0) {
-            tableModel.addRow(new Object[]{connection.GetFreeID(), firstName, lastName, row, place});
-            connection.AddNewInfo(firstName, lastName, row, place);
+            tableModel.addRow(new Object[]{connection.getFreeID(), firstName, lastName, row, place});
+            connection.addNewInfo(firstName, lastName, row, place);
         } else {
             JOptionPane.showMessageDialog(Table.this,
                     "Something went wrong. Row was not added", "Error", JOptionPane.ERROR_MESSAGE);
