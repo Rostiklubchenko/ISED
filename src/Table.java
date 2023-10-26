@@ -11,7 +11,7 @@ public class Table extends JFrame {
     JTable table;
     Table() {
         System.out.println(connection.getRows());
-        setTitle("Це база друже, надягаю кавун");
+        setTitle("Database");
         setPreferredSize(new Dimension(600, 400));
         setLocationRelativeTo(null);
         addWindowListener(new WindowAdapter() {
